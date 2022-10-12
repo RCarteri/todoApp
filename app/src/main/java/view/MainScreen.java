@@ -391,11 +391,16 @@ public final class MainScreen extends javax.swing.JFrame {
     private void jTableTasksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTasksMouseClicked
         int rowIndex = jTableTasks.rowAtPoint(evt.getPoint());
         int columnIndex = jTableTasks.columnAtPoint(evt.getPoint());
+                Task task = taskModel.getTasks().get(rowIndex);
 
         switch (columnIndex) {
             case 3 -> {
-                Task task = taskModel.getTasks().get(rowIndex);
                 taskController.update(task);
+            }
+            case 5 -> {
+                taskController.remove(task.getId());
+                taskModel.getTasks().remove(task);
+                loadTasks(getProjectSelected().getId());
             }
             default ->
                 throw new AssertionError();
@@ -522,7 +527,6 @@ public final class MainScreen extends javax.swing.JFrame {
             jPanelEmptyList.setVisible(true);
             jPanelEmptyList.setSize(jPanel6.getWidth(), jPanel6.getHeight());
         }
-
     }
 
     public void loadProjects() {

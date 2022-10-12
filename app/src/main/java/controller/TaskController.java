@@ -72,7 +72,7 @@ public class TaskController {
         }
     }
 
-    public void remove(int taskId) throws SQLException {
+    public void remove(int taskId) {
         String sql = "DELETE FROM tasks WHERE id = ?";
         Connection conn = null;
         PreparedStatement statement = null;
@@ -81,8 +81,8 @@ public class TaskController {
             statement = conn.prepareStatement(sql);
             statement.setInt(1, taskId);
             statement.execute();
-        } catch (SQLException e) {
-            throw new SQLException("Erro ao deletar a tarefa");
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar a tarefa");
         } finally {
             closeConnection(conn, statement);
         }
