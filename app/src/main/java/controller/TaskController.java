@@ -33,7 +33,7 @@ public class TaskController {
             statement.setDate(7, new Date(task.getCreateAt().getTime()));
             statement.setDate(8, new Date(task.getUpdateAt().getTime()));
             statement.execute();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar a tarefa " +
                     e.getMessage(), e);
         } finally {
@@ -41,7 +41,7 @@ public class TaskController {
         }
     }
 
-    public void update(Task task) throws SQLException {
+    public void update(Task task) {
         String sql = "UPDATE tasks SET " +
                 "idProject = ?, " +
                 "name = ?, " +
@@ -88,12 +88,12 @@ public class TaskController {
         }
     }
 
-    public List<Task> getAll(int idProject) throws SQLException {
+    public List<Task> getAll(int idProject) {
         String sql = "SELECT * FROM tasks WHERE idProject = ?";
         Connection conn = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        List<Task> tasks = new ArrayList<Task>();
+        List<Task> tasks = new ArrayList<>();
         try {
             conn = getConnection();
             statement = conn.prepareStatement(sql);
