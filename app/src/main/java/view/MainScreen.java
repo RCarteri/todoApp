@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.SQLException;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import model.Project;
@@ -61,8 +60,8 @@ public final class MainScreen extends javax.swing.JFrame {
         jScrollPaneProjects = new javax.swing.JScrollPane();
         jListProjects = new javax.swing.JList<>();
         jPanelTasks = new javax.swing.JPanel();
-        jLabelTasksTitle = new javax.swing.JLabel();
         jLabelTasksAdd = new javax.swing.JLabel();
+        jLabelTasksTitle = new javax.swing.JLabel();
 
         jPanelEmptyList.setBackground(java.awt.Color.white);
 
@@ -250,18 +249,18 @@ public final class MainScreen extends javax.swing.JFrame {
         jPanelTasks.setBackground(new java.awt.Color(255, 255, 255));
         jPanelTasks.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabelTasksTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTasksTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/plus (1).png"))); // NOI18N
-        jLabelTasksTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabelTasksAdd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelTasksAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/plus (1).png"))); // NOI18N
+        jLabelTasksAdd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabelTasksTitleMouseClicked(evt);
+                jLabelTasksAddMouseClicked(evt);
             }
         });
 
-        jLabelTasksAdd.setBackground(new java.awt.Color(255, 255, 255));
-        jLabelTasksAdd.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabelTasksAdd.setForeground(new java.awt.Color(0, 153, 153));
-        jLabelTasksAdd.setText("Tarefas");
+        jLabelTasksTitle.setBackground(new java.awt.Color(255, 255, 255));
+        jLabelTasksTitle.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabelTasksTitle.setForeground(new java.awt.Color(0, 153, 153));
+        jLabelTasksTitle.setText("Tarefas");
 
         javax.swing.GroupLayout jPanelTasksLayout = new javax.swing.GroupLayout(jPanelTasks);
         jPanelTasks.setLayout(jPanelTasksLayout);
@@ -269,9 +268,9 @@ public final class MainScreen extends javax.swing.JFrame {
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTasksLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabelTasksAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                .addComponent(jLabelTasksTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
                 .addGap(376, 376, 376)
-                .addComponent(jLabelTasksTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelTasksAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanelTasksLayout.setVerticalGroup(
@@ -279,8 +278,8 @@ public final class MainScreen extends javax.swing.JFrame {
             .addGroup(jPanelTasksLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelTasksTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabelTasksAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
+                    .addComponent(jLabelTasksAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelTasksTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -348,11 +347,23 @@ public final class MainScreen extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_jLabelProjectsAddMouseClicked
 
-    private void jLabelTasksTitleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelTasksTitleMouseClicked
+    private Project getProjectSelected(){
+        int projectIndex = jListProjects.getSelectedIndex();
+        return (Project) projectsModel.get(projectIndex);
+    }
+    
+    private void jLabelTasksAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelTasksAddMouseClicked
         TaskDialogScreen taskDialogScreen = new TaskDialogScreen(this, rootPaneCheckingEnabled);
-        // taskDialogScreen.setProject(null);
+       
+        taskDialogScreen.setProject(getProjectSelected());
         taskDialogScreen.setVisible(true);
-    }//GEN-LAST:event_jLabelTasksTitleMouseClicked
+
+        taskDialogScreen.addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+                loadTasks(getProjectSelected().getId());
+            }
+        });
+    }//GEN-LAST:event_jLabelTasksAddMouseClicked
 
     private void jTableTasksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTasksMouseClicked
         int rowIndex = jTableTasks.rowAtPoint(evt.getPoint());
@@ -363,7 +374,8 @@ public final class MainScreen extends javax.swing.JFrame {
                 Task task = taskModel.getTasks().get(rowIndex);
                 taskController.update(task);
             }
-            default -> throw new AssertionError();
+            default ->
+                throw new AssertionError();
         }
     }//GEN-LAST:event_jTableTasksMouseClicked
 
@@ -439,7 +451,6 @@ public final class MainScreen extends javax.swing.JFrame {
 
         //Criando um sorter para as colunas
         jTableTasks.setAutoCreateRowSorter(true);
-
     }
 
     public void initDataController() {
@@ -453,7 +464,12 @@ public final class MainScreen extends javax.swing.JFrame {
 
         taskModel = new TaskTableModel();
         jTableTasks.setModel(taskModel);
-        loadTasks(1);
+
+        if (!projectsModel.isEmpty()) {
+            jListProjects.setSelectedIndex(0);
+            Project project = (Project) projectsModel.get(0);
+            loadTasks(project.getId());
+        }
     }
 
     public void loadTasks(int idProject) {

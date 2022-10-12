@@ -179,7 +179,7 @@ public class TaskDialogScreen extends javax.swing.JDialog {
     private void jLabelToolbarSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelToolbarSaveMouseClicked
         try {
             Task task = new Task();
-            task.setIdProjeto(1);
+            task.setIdProjeto(project.getId());
             task.setName(jTextFieldName.getText());
             task.setDescription(jTextAreaDescription.getText());
             task.setNotes(jTextAreaNote.getText());

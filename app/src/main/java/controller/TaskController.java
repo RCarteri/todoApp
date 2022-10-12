@@ -67,8 +67,8 @@ public class TaskController {
             statement.setDate(8, new Date(task.getUpdateAt().getTime()));
             statement.setInt(9, task.getId());
             statement.execute();
-        } catch (SQLException e) {
-            throw new SQLException("Erro ao atualizar a tarefa");
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar a tarefa");
         }
     }
 
