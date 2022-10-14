@@ -21,7 +21,7 @@ public class TaskDialogScreen extends javax.swing.JDialog {
 
     TaskController controller;
     Project project;
-    
+
     public TaskDialogScreen(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -178,24 +178,28 @@ public class TaskDialogScreen extends javax.swing.JDialog {
 
     private void jLabelToolbarSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelToolbarSaveMouseClicked
         try {
-            Task task = new Task();
-            task.setIdProjeto(project.getId());
-            task.setName(jTextFieldName.getText());
-            task.setDescription(jTextAreaDescription.getText());
-            task.setNotes(jTextAreaNote.getText());
-            task.setIsCompleted(false);
-            
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Date deadline = dateFormat.parse(jFormattedTextFieldPrize.getText());
-            task.setDeadline(deadline);
-            controller.save(task);
-            JOptionPane.showMessageDialog(rootPane, "Tarefa salva com sucesso.");
-            
+            if (!jTextFieldName.getText().equals("")
+                    && !jFormattedTextFieldPrize.getText().isEmpty()) {
+                Task task = new Task();
+                task.setIdProjeto(project.getId());
+                task.setName(jTextFieldName.getText());
+                task.setDescription(jTextAreaDescription.getText());
+                task.setNotes(jTextAreaNote.getText());
+                task.setIsCompleted(false);
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date deadline = dateFormat.parse(jFormattedTextFieldPrize.getText());
+                task.setDeadline(deadline);
+                controller.save(task);
+                JOptionPane.showMessageDialog(rootPane, "Tarefa salva com sucesso.");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "A tarefa não foi salva pois os camos 'nome' e 'prazo' são obrigatórios.");
+            }
+
         } catch (HeadlessException | ParseException e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
-
         }
-        this.dispose();
     }//GEN-LAST:event_jLabelToolbarSaveMouseClicked
 
     /**
@@ -262,4 +266,3 @@ public class TaskDialogScreen extends javax.swing.JDialog {
         this.project = project;
     }
 }
-

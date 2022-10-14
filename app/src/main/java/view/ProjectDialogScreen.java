@@ -16,7 +16,7 @@ import model.Project;
 public class ProjectDialogScreen extends javax.swing.JDialog {
 
     ProjectController controller;
-    
+
     public ProjectDialogScreen(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -144,15 +144,19 @@ public class ProjectDialogScreen extends javax.swing.JDialog {
 
     private void jLabelToolbarSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelToolbarSaveMouseClicked
         try {
-            Project project = new Project();
-            project.setName(jTextFieldName.getText());
-            project.setDescription(jTextAreaDescription.getText());
-            controller.save(project);
-            JOptionPane.showMessageDialog(rootPane, "Projeto salvo com sucesso.");
-        }catch(HeadlessException e){
+            if (!jTextFieldName.getText().equals("")) {
+                Project project = new Project();
+                project.setName(jTextFieldName.getText());
+                project.setDescription(jTextAreaDescription.getText());
+                controller.save(project);
+                JOptionPane.showMessageDialog(rootPane, "Projeto salvo com sucesso.");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Campo 'nome' é obrigatório, o projeto não foi salvo.");
+            }
+        } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
         }
-            this.dispose();
     }//GEN-LAST:event_jLabelToolbarSaveMouseClicked
 
     /**
