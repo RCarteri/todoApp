@@ -34,7 +34,7 @@ public class DeadlineColumnCellRenderer extends DefaultTableCellRenderer{
         else
             label.setBackground(Color.RED);
         
-        return null;
+        return label;
     }
     
 }
