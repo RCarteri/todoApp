@@ -10,7 +10,7 @@ O projeto consiste em um programa em Java com interface gráfica para criação 
 ![inicial](/imagens/inicial.png)
 
 Nele é possível criar projetos:
-![projetos](/imagens/projetos.png)
+![projetos](/imagens/projeto.png)
 
 E tarefas para cada projeto:
 ![projetos](/imagens/tarefa.png)
